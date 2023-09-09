@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>BattleBitExpansionCore_TestPlugin</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Title>BattleBitExpansionCore-TestPlugin</Title>
+        <Description>BattleBitExpansionCore-TestPlugin</Description>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\BattleBit-Community-Server-API-main\CommunityServerAPI.csproj"/>
+        <ProjectReference Include="..\BattleBitExpansionCore\BattleBitExpansionCore.csproj"/>
+    </ItemGroup>
+
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="../.yung/DemoPlugin.bat"/>
+    </Target>
+</Project>

@@ -1,8 +1,10 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
+using BattleBitExpansionCore.DataSaver.Managers;
 using CyberTechBattleBit2.Managers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using JsonConverter = Newtonsoft.Json.JsonConverter;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace CyberTechBattleBit2.DataSaver;
@@ -29,7 +31,11 @@ public class PermissionDataManager : BaseDataSaverClass
     {
         var json = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.Auto
+            TypeNameHandling = TypeNameHandling.Auto,
+            Converters = new List<JsonConverter>()
+            {
+                new GameModeMapDataEntry.GamemodesConvert()
+            }
         });
         SaveToFile(json, ParsedSaveLocation);
     }
@@ -50,7 +56,9 @@ public class PermissionDataManager : BaseDataSaverClass
     {
         var a = ReadFromFile();
         PermissionGroups = (ServerGroupPermissionList_DataHolder)a;
-        foreach (var d in PermissionGroups.Data) Tools.ConsoleLog($"LOADED GROUP >>> {d.Name}");
+        foreach (var d in PermissionGroups.Data)
+            if (BattleBitExtenderMain.DebugMode)
+                Tools.ConsoleLog($"LOADED GROUP >>> {d.Name}");
     }
 }
 

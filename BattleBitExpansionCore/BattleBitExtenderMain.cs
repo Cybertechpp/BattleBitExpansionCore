@@ -224,9 +224,7 @@ public class BattleBitExtenderMain : LogTools.ModuleLogHelper<BattleBitExtenderM
             var a = DSM.GetPlayer(player);
             if (a != null)
             {
-                player.SetXp(a.XP);
-                player.Kills = a.Kills;
-                player.Deaths = a.Deaths;
+                a.LoadDataToPlayer(player);
                 Tools.ConsoleLog("JUST LOADED SAVED PLAYER DATA!!!");
             }
 

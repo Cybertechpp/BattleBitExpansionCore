@@ -48,12 +48,12 @@ public class ServerBanSettingsData : BaseDataSaverTemplate
         BanEntry a;
         if (BanList.TryGetValue(steamid, out a))
         {
-            Tools.ConsoleLog($"GOOOTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT {a.IsValid()}");
+            // Tools.ConsoleLog($"GOOOTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT {a.IsValid()}");
             if (a.IsValid() && checkvalid) return a;
             else if (!checkvalid) return a;
         }
 
-        Tools.ConsoleLog($"FFFFFFFFFFFFFFFFFFFFFFFFF");
+        // Tools.ConsoleLog($"FFFFFFFFFFFFFFFFFFFFFFFFF");
 
         return null;
     }

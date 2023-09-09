@@ -61,7 +61,7 @@ public class GameserverCMD : Command
         return true;
     }
 
-    public override bool RunCommandConsole(string[] args)
+    public override bool RunConsoleCommand(string[] args)
     {
             BattleBitExtenderMain Main = BattleBitExtenderMain.Instance;
         if (Args.Length == 0)

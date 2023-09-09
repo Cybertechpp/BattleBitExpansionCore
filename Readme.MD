@@ -18,3 +18,6 @@ After the first time running the exe, it will create a Data and Plugin folder.
 Install any Plugin in the Plugin Folder.
 
 Most Data is saved in the Data folder.
+
+
+## S

@@ -22,7 +22,7 @@ public class SayCommand : Command
         return true;
     }
 
-    public override bool RunCommandConsole(string[] args)
+    public override bool RunConsoleCommand(string[] args)
     {
         foreach (var p in BattleBitExtenderMain.Instance.L.ConnectedGameServers)
         foreach (var pp in p.AllPlayers)

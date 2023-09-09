@@ -3,8 +3,10 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using BattleBitExpansionCore.DataSaver.Managers;
 using CyberTechBattleBit2.DataSaver.Templates;
 using Newtonsoft.Json;
+using JsonConverter = Newtonsoft.Json.JsonConverter;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace CyberTechBattleBit2.DataSaver;
@@ -56,7 +58,11 @@ public abstract class BaseDataSaverClass
     {
         var datas = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.Auto
+            TypeNameHandling = TypeNameHandling.Auto,
+            Converters = new List<JsonConverter>()
+            {
+                new GameModeMapDataEntry.GamemodesConvert()
+            }
         });
         if (location == null) location = ParsedSaveLocation;
         File.WriteAllText(location, datas);
@@ -80,7 +86,11 @@ public abstract class BaseDataSaverClass
         {
             return JsonConvert.DeserializeObject(File.ReadAllText(location), SaveStructure, new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.Auto
+                TypeNameHandling = TypeNameHandling.Auto,
+                Converters = new List<JsonConverter>()
+                {
+                    new GameModeMapDataEntry.GamemodesConvert()
+                }
             });
         }
         catch (Exception e)

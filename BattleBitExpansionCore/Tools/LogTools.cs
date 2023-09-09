@@ -16,7 +16,7 @@ public static class LogTools
     // }
 
 
-    public class ModuleLogHelper<TT> : LogHelperBase<TT>
+    public class ModuleLogHelper<TT> : ILogHelperBase<TT>
     {
         public ModuleLogHelper(ConsoleColor textColor = ConsoleColor.Yellow, ConsoleColor backgroundColor = ConsoleColor.Green, string moduleName = null) : base(ConsoleColorToColor(textColor), ConsoleColorToColor(backgroundColor), moduleName)
         {
@@ -32,9 +32,10 @@ public static class LogTools
         }
     }
 
-    public class LogHelperBase<T>
+    public abstract class ILogHelperBase<T>
     {
-        public string Name;
+        public string Name { get; set; } = null;
+        public static ModuleLogHelperLog Log;
 
         public static Color? ConsoleColorToColor(ConsoleColor? color)
         {
@@ -47,19 +48,23 @@ public static class LogTools
         public Color TextColor = Color.White;
         public Color BackgroundColor = Color.Purple;
 
-        public LogHelperBase(Color? textColor = null, ConsoleColor backgroundColor = ConsoleColor.White, string moduleName = null) : this(textColor, ConsoleColorToColor(backgroundColor), moduleName)
+        public ILogHelperBase(Color? textColor = null, ConsoleColor backgroundColor = ConsoleColor.White, string moduleName = null) : this(textColor, ConsoleColorToColor(backgroundColor), moduleName)
         {
         }
 
-        public LogHelperBase(ConsoleColor textColor = ConsoleColor.Yellow, ConsoleColor backgroundColor = ConsoleColor.Green, string moduleName = null) : this(ConsoleColorToColor(textColor), ConsoleColorToColor(backgroundColor), moduleName)
+        public ILogHelperBase(ConsoleColor textColor = ConsoleColor.Yellow, ConsoleColor backgroundColor = ConsoleColor.Green, string moduleName = null) : this(ConsoleColorToColor(textColor), ConsoleColorToColor(backgroundColor), moduleName)
         {
         }
 
-        public LogHelperBase(ConsoleColor textColor = ConsoleColor.Yellow, Color? backgroundColor = null, string moduleName = null) : this(ConsoleColorToColor(textColor), backgroundColor, moduleName)
+        public ILogHelperBase(ConsoleColor textColor = ConsoleColor.Yellow, Color? backgroundColor = null, string moduleName = null) : this(ConsoleColorToColor(textColor), backgroundColor, moduleName)
         {
         }
 
-        protected LogHelperBase(Color? textColor = null, Color? backgroundColor = null, string moduleName = null)
+        public ILogHelperBase() : this(null, null, null)
+        {
+        }
+
+        protected ILogHelperBase(Color? textColor = null, Color? backgroundColor = null, string moduleName = null)
         {
             if (backgroundColor != null) BackgroundColor = (Color)backgroundColor;
             if (textColor != null) TextColor = (Color)textColor;
@@ -77,14 +82,11 @@ public static class LogTools
         }
 
 
-        public ModuleLogHelperLog Log;
-
-
         public class ModuleLogHelperLog
         {
-            private static LogHelperBase<T> H;
+            private static ILogHelperBase<T> H;
 
-            public ModuleLogHelperLog(LogHelperBase<T> h)
+            public ModuleLogHelperLog(ILogHelperBase<T> h)
             {
                 H = h;
             }
@@ -98,7 +100,8 @@ public static class LogTools
                 Tools.ConsoleLog(format.Background(Color.CornflowerBlue));
                 // Tools.ConsoleLog(Tools.TextTemplates.FirstLevelTags.BBECTag.ToString() + pt + Tools.TextTemplates.LogInfoLevel + " > " + str);
             }
-     public void Warn(object str)
+
+            public void Warn(object str)
             {
                 var pt = $"[{H.Name}]".Color(H.TextColor).Background(H.BackgroundColor);
                 var prefix = Tools.TextTemplates.FirstLevelTags.BBECTag.ToString() + pt + Tools.TextTemplates.ThridLevelTags.WarnInfoLevel;

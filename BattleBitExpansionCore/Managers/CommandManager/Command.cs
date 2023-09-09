@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Drawing;
 using System.Reflection;
 using ANSIConsole;
 using BattleBitAPI.Common;
@@ -215,7 +216,7 @@ public abstract class CommandBase
         }
         else
         {
-            r = RunCommandConsole(Args);
+            r = RunConsoleCommand(Args);
         }
 
         if (r) OnSuccess();
@@ -242,9 +243,9 @@ public abstract class CommandBase
     /// Return false to indicate that the command has failed.
     /// </summary>
     /// <returns></returns>
-    public virtual bool RunCommandConsole(string[] args)
+    public virtual bool RunConsoleCommand(string[] args)
     {
-        Tools.ConsoleLog($"Console command not implemented for {Command}");
+        Tools.ConsoleLog($"Console command not implemented for {Command}".Background(Color.Orange).Color(ConsoleColor.Gray));
         return true;
     }
 

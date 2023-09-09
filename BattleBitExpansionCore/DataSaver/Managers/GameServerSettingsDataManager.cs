@@ -53,7 +53,11 @@ public class GameServerSettingsDataManager : BaseDataSaverClass
         foreach (var location in jsons)
         {
             GameServerSettingHolder a = (GameServerSettingHolder)ReadFromFile(location);
-            if (a.ServerSettings.Hash != null) GameServerSettings[(ulong)a.ServerSettings.Hash] = a;
+            if (a.ServerSettings.Hash != null)
+            {
+                a.OnAdd();
+                GameServerSettings[(ulong)a.ServerSettings.Hash] = a;
+            }
         }
     }
 
@@ -67,6 +71,7 @@ public class GameServerSettingsDataManager : BaseDataSaverClass
         }
         var s = new GameServerSettingHolder();
         s.LoadGSValues(gs);
+        s.OnAdd();
         GameServerSettings[hash] = s;
         return s;
     }

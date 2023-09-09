@@ -8,6 +8,7 @@ using CyberTechBattleBit2.DataSaver.Templates;
 using CyberTechBattleBit2.Events;
 using System.Text.Json;
 using BattleBitAPI.Pooling;
+using BattleBitExpansionCore.DataSaver.Managers;
 using CyberTechBattleBit2.DataSaver;
 using CyberTechBattleBit2.Managers.PluginManager.Utils;
 using Newtonsoft.Json;
@@ -59,7 +60,11 @@ public class PluginManager
 
                 var az = JsonConvert.SerializeObject(vv, Formatting.Indented, new JsonSerializerSettings
                 {
-                    TypeNameHandling = TypeNameHandling.Auto
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    Converters = new List<JsonConverter>()
+                    {
+                        new GameModeMapDataEntry.GamemodesConvert()
+                    }
                 });
                 File.WriteAllText(sp, az);
             }
@@ -130,10 +135,11 @@ public class PluginManager
                 var aa = type.Attributes.ToString();
                 var aaa = type.GetCustomAttributesData();
                 //IN CLASS/FILE
-                Tools.ConsoleLog(Tools.TextTemplates.FirstLevelTags.BBECTag + Tools.TextTemplates.SecondLevelTags.PluginManager +
-                                 "HEY Found Class Files".Background(Color.Orange).Color(ConsoleColor.White) + " > " +
-                                 type?.Name +
-                                 $" ||| {aaa.Count}");
+                if (BattleBitExtenderMain.DebugMode)
+                    Tools.ConsoleLog(Tools.TextTemplates.FirstLevelTags.BBECTag + Tools.TextTemplates.SecondLevelTags.PluginManager +
+                                     "HEY Found Class Files".Background(Color.Orange).Color(ConsoleColor.White) + " > " +
+                                     type?.Name +
+                                     $" ||| {aaa.Count}");
                 //CHECK ATTRIBUTES
                 var validAttr = false;
 
@@ -182,7 +188,7 @@ public class PluginManager
                 if (MainType == null && mainType != null) MainType = mainType;
                 if (commandTypes.Count > 0)
                 {
-                    Tools.ConsoleLog($"ADDING P{commandTypes.Count}".Background(ConsoleColor.Red));
+                    // Tools.ConsoleLog($"ADDING P{commandTypes.Count}".Background(ConsoleColor.Red));
                     CommandTypes.AddRange(commandTypes);
                 }
 
@@ -198,10 +204,11 @@ public class PluginManager
 
                 foreach (var z in aaa)
                 {
-                    Tools.ConsoleLog(Tools.TextTemplates.FirstLevelTags.BBECTag + Tools.TextTemplates.SecondLevelTags.PluginManager +
-                                     "HEY Found ATTRIBUTE FOR THIS CLASS  Files".Background(Color.Orange)
-                                         .Color(ConsoleColor.White) + " > " +
-                                     type?.Name + $" ||| {z} TYPE {type}");
+                    if (BattleBitExtenderMain.DebugMode)
+                        Tools.ConsoleLog(Tools.TextTemplates.FirstLevelTags.BBECTag + Tools.TextTemplates.SecondLevelTags.PluginManager +
+                                         "HEY Found ATTRIBUTE FOR THIS CLASS  Files".Background(Color.Orange)
+                                             .Color(ConsoleColor.White) + " > " +
+                                         type?.Name + $" ||| {z} TYPE {type}");
                     var c1 = aaa.Where(a => a.AttributeType == typeof(PluginAttributes.PluginInfoAttribute))
                         // .Select(a => new CustomAttributeData(a))
                         .ToList();
@@ -214,7 +221,7 @@ public class PluginManager
             pluginInfo.FoundCommands = CommandTypes;
             PlugList.Add(pluginInfo);
             Tools.ConsoleLog(Tools.TextTemplates.FirstLevelTags.BBECTag + Tools.TextTemplates.SecondLevelTags.PluginManager +
-                             $" Found {pluginInfo.InfoAttribute.Name} wth {pluginInfo.FoundCommands.Count} || {CommandTypes.Count} Commands!"
+                             $" Found {pluginInfo.InfoAttribute.Name} wth {pluginInfo.FoundCommands.Count} " //|| {CommandTypes.Count} Commands!
                                  .Color(ConsoleColor.Yellow));
 
             //Fond Class Files
@@ -270,7 +277,7 @@ public class PluginManager
                     zz.Perms.AddRange(rawPermList);
 
                 // if(zz) // DEBUG MESSAGE
-                Tools.ConsoleLog($"Hey we got thissSSSSSSSSSSSSSSSSSSSSSSSSSSSS TYPE:{zz.GetType()} {zz.Perms.Count}");
+                if(BattleBitExtenderMain.DebugMode)Tools.ConsoleLog($"Hey we got thissSSSSSSSSSSSSSSSSSSSSSSSSSSSS TYPE:{zz.GetType()} {zz.Perms.Count}");
                 z.AddCommand(zz);
             }
 
@@ -286,7 +293,7 @@ public class PluginManager
                     PluginAttributes.PluginEventAttribute[] foundCustomAttr = (PluginAttributes.PluginEventAttribute[])m.GetCustomAttributes(typeof(PluginAttributes.PluginEventAttribute), false);
                     foreach (var singlefound in foundCustomAttr)
                     {
-                        var ee = PluginMethodEventWrapper.createInstance(singlefound.Type);
+                        PluginMethodEventWrapper ee = PluginMethodEventWrapper.createInstance(singlefound.Type);
                         ee.Priority = singlefound.Priority; // ?? EventPriority.MEDIUM;
                         ee.fireEventFunc += async data =>
                         {
@@ -298,7 +305,7 @@ public class PluginManager
                 }
             }
 
-            Tools.ConsoleLog(">>>>>>>>>>>>>>>>>>>>>>>>>3333333333333333333>>>>>>>".Color(ConsoleColor.Red) + plug.DatasaverAttributes.Count.ToString());
+        if(BattleBitExtenderMain.DebugMode)    Tools.ConsoleLog(">>>>>>>>>>>>>>>>>>>>>>>>>3333333333333333333>>>>>>>".Color(ConsoleColor.Red) + plug.DatasaverAttributes.Count.ToString());
             foreach (var tds in plug.DatasaverAttributes)
             {
                 var t = tds.Value.SaveType;
@@ -315,12 +322,20 @@ public class PluginManager
                 {
                     var obj = JsonConvert.DeserializeObject(@"", t, new JsonSerializerSettings
                     {
-                        TypeNameHandling = TypeNameHandling.Auto
+                        TypeNameHandling = TypeNameHandling.Auto,
+                        Converters = new List<JsonConverter>()
+                        {
+                            new GameModeMapDataEntry.GamemodesConvert()
+                        }
                     });
                     o = (CustomPlayerData.CustomPlayerData_PluginData)Activator.CreateInstance(t, new object[] { });
                     var az = JsonConvert.SerializeObject(o, Formatting.Indented, new JsonSerializerSettings
                     {
-                        TypeNameHandling = TypeNameHandling.Auto
+                        TypeNameHandling = TypeNameHandling.Auto,
+                        Converters = new List<JsonConverter>()
+                        {
+                            new GameModeMapDataEntry.GamemodesConvert()
+                        }
                     });
                     File.WriteAllText(sp, az);
                 }
@@ -328,12 +343,16 @@ public class PluginManager
                 {
                     try
                     {
-                        Tools.ConsoleLog("YOOoaosdoasdasdasdasdasdasdsa dasd asd asd ");
+                        // Tools.ConsoleLog("YOOoaosdoasdasdasdasdasdasdsa dasd asd asd ");
                         var jsonString = File.ReadAllText(sp);
-                        Tools.ConsoleLog(jsonString);
+                        // Tools.ConsoleLog(jsonString);
                         o = (CustomPlayerData.CustomPlayerData_PluginData)JsonConvert.DeserializeObject(jsonString, t, new JsonSerializerSettings
                         {
-                            TypeNameHandling = TypeNameHandling.Auto
+                            TypeNameHandling = TypeNameHandling.Auto,
+                            Converters = new List<JsonConverter>()
+                            {
+                                new GameModeMapDataEntry.GamemodesConvert()
+                            }
                         });
                         // o = (CustomPlayerData.CustomPlayerData_PluginData)JsonConvert.DeserializeObject(jsonString,t);
                     }
@@ -344,12 +363,20 @@ public class PluginManager
 
                         var obj = JsonConvert.DeserializeObject(@"", t, new JsonSerializerSettings
                         {
-                            TypeNameHandling = TypeNameHandling.Auto
+                            TypeNameHandling = TypeNameHandling.Auto,
+                            Converters = new List<JsonConverter>()
+                            {
+                                new GameModeMapDataEntry.GamemodesConvert()
+                            }
                         });
                         o = (CustomPlayerData.CustomPlayerData_PluginData)Activator.CreateInstance(t, new object[] { });
                         var az = JsonConvert.SerializeObject(o, Formatting.Indented, new JsonSerializerSettings
                         {
-                            TypeNameHandling = TypeNameHandling.Auto
+                            TypeNameHandling = TypeNameHandling.Auto,
+                            Converters = new List<JsonConverter>()
+                            {
+                                new GameModeMapDataEntry.GamemodesConvert()
+                            }
                         });
                         File.WriteAllText(sp, az);
                     }
@@ -361,7 +388,7 @@ public class PluginManager
                 // Tools.ConsoleLog(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>".Color(ConsoleColor.Red)+obj.GetType().ToString());
                 // plug.DatasaverAttributes
                 DatasaverObject[tds.Key] = o;
-                Tools.ConsoleLog($"JUST AND {sp} FFFFFFFFFFFF" + JsonConvert.SerializeObject(o));
+                // Tools.ConsoleLog($"JUST AND {sp} FFFFFFFFFFFF" + JsonConvert.SerializeObject(o));
                 // var weatherForecast = JsonConvert.DeserializeObject<CustomPlayerData>("")!;
             }
         }

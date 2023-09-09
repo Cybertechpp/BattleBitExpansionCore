@@ -51,7 +51,7 @@ public class CommandManager : LogTools.ModuleLogHelper<CommandManager>
         {
             c.onPreAddToServer();
             CommandList.Add(c.GetCommand().ToLower(), c);
-            Log.Info($"Adding Command {c.GetCommand()} To List {c.Perms.Count}!");
+            if(BattleBitExtenderMain.DebugMode)Log.Info($"Adding Command {c.GetCommand()} To List With {c.Perms.Count} Perm!");
         }
     }
 

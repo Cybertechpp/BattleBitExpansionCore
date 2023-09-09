@@ -44,7 +44,6 @@ public class CustomPlayer : Player<CustomPlayer>
 
     internal ulong TempSteamID { get; set; }
 
-    public bool IsZombie;
     public string Prefix;
     public string DisplayName;
     public int RunningXP { get; private set; }

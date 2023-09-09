@@ -6,6 +6,12 @@ public interface IPluginEvent
 
 public abstract class IPlugin<T>
 {
+
+    public string PluginName = "NotSet";
+    public IPlugin(string pluginName)
+    {
+        PluginName = pluginName;
+    }
     // public IPlugin(T t)
     // {
     //     Instance = t;

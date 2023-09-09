@@ -46,7 +46,7 @@ public class SaveCommand : Command
         return true;
     }
 
-    public override bool RunCommandConsole(string[] args)
+    public override bool RunConsoleCommand(string[] args)
     {
         foreach (var gs in BattleBitExtenderMain.Instance.L.ConnectedGameServers)
         foreach (var p in gs.AllPlayers)

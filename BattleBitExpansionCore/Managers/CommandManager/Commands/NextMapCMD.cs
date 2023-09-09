@@ -1,4 +1,5 @@
 using System.Reflection;
+using ANSIConsole;
 using BattleBitAPI.Common;
 using BattleBitExpansionCore.DataSaver.Managers;
 using CyberTechBattleBit2.DataSaver;
@@ -23,7 +24,9 @@ public class NextMapCMD : Command
             // gsd.ExtenderGamemodeMapData.SetNextGamemodeMapSize(Gameserver);
             // Gameserver.ForceEndGame(Team.None);
             // Gameserver.SayToAllChat("Current Game is ending!  The next map will be");
-            gsd.ExtenderGamemodeMapData.ForceStartNewGame(Gameserver);
+            // gsd.ExtenderGamemodeMapData.ForceStartNewGame(Gameserver);
+            
+            Gameserver.ForceEndGame(Team.None);
             return true;
         }
         
@@ -40,6 +43,19 @@ public class NextMapCMD : Command
         
         }
 
+        return true;
+    }
+
+    public override bool RunConsoleCommand(string[] args)
+    {
+        if (Gameserver == null)
+        {
+            Tools.ConsoleLog("Please select a Gameserver then use this command.".Background(ConsoleColor.Yellow).Color(ConsoleColor.Black));
+            return true;
+        }
+        GameServerSettingHolder gsd = BattleBitExtenderMain.Instance.GameServerSettings.getGameServerSettings(Gameserver);
+        // gsd.ExtenderGamemodeMapData.ForceStartNewGame(Gameserver);
+        Gameserver.ForceEndGame(Team.None);
         return true;
     }
 

@@ -10,8 +10,8 @@ namespace BattleBitExpansionCore_TestPlugin;
 
 [PluginAttributes.PluginDataSaver(typeof(TestSaveData), "testFile")] //Creates a JsonFIle of Var Class Type
 [PluginAttributes.PluginInfo(Author = "Yungtechboy1", Name = "Test Plugin / RevengeBoost",
-    Copyright = "All rights Reserved 2023", Description = "Test Plugin demonstrating how to use BBEC API",
-    URL = "yungtechboy1.com", Version = "0.0.1")]
+    Copyright = "Dummy Copyright 2023", Description = "Test Plugin demonstrating how to use BBEC API",
+    URL = "yungtechboy1.com", Version = "1.0.0")]
 public class TestPlugin : PluginBase, IPluginEvent
 {
     //This plugin will be called "RevengeBoost". Killing a player that has killed you within 2 of your deaths will add XP and Perks!

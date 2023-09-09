@@ -1,3 +1,4 @@
+using BattleBitExpansionCore_TestPlugin;
 using CyberTechBattleBit2;
 using CyberTechBattleBit2.Events;
 using CyberTechBattleBit2.Managers.PluginManager.Utils;
@@ -19,7 +20,7 @@ public class TestEvent : ServerConnectEvent
 
     public override object? fireEvent()
     {
-        // Tools.ConsoleLog("HEY^YYYYYYYYYYYYYYYYY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        TestPlugin.Log.Info(("A new Gameserver has connected!"));
         return base.fireEvent();
     }
 }

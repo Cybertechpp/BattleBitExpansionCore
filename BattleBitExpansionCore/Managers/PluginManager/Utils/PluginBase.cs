@@ -9,7 +9,6 @@ namespace CyberTechBattleBit2.Managers.PluginManager.Utils;
 
 public abstract class PluginBase : IPlugin<PluginBase>
 {
-    public string PluginName = "NotSet";
 
     public CustomPlayerData.CustomPlayerData_PluginData? GetDatastore(string key)
     {
@@ -21,10 +20,10 @@ public abstract class PluginBase : IPlugin<PluginBase>
         return (T)BattleBitExpansionCore.Managers.PluginManager.PluginManager.getInstance().getDataSaverObject(key);
     }
 
-    public PluginLogHelper Log;
+    public static PluginLogHelper Log;
     public PluginAttributes.PluginInfoAttribute PluginInfo;
 
-    public PluginBase(PluginAttributes.PluginInfoAttribute info)
+    public PluginBase(PluginAttributes.PluginInfoAttribute info) : base(info.Name)
     {
         PluginInfo = info;
         setInstance(this);

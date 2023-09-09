@@ -2,7 +2,7 @@ namespace CyberTechBattleBit2.DataSaver.Templates;
 
 public class ExtenderServerSettingsData
 {
-    public bool DebugMode { get; set; } = true;
+    public bool DebugMode { get; set; } = false;
     public int Port { get; set; } = 29294;
     public bool SavePlayerData { get; set; } = true;
     public bool AutoExpandServer { get; set; } = true;

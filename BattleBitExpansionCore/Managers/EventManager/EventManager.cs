@@ -54,7 +54,7 @@ public class EventManager : LogTools.ModuleLogHelper<EventManager>
     {
         P.L.OnGameServerConnected += async server =>
         {
-            Tools.ConsoleLog("EVENT OnGameServerConnected".Color(ConsoleColor.Red));
+            if(BattleBitExtenderMain.DebugMode)Tools.ConsoleLog("EVENT OnGameServerConnected".Color(ConsoleColor.Red));
             var ev = new ServerConnectEvent();
             ev.LoadData(new ServerConnectEventData((CustomGameServer)server));
             CallEvent(ev);
@@ -63,7 +63,7 @@ public class EventManager : LogTools.ModuleLogHelper<EventManager>
 
         P.L.OnCreatingPlayerInstance += steamID =>
         {
-            Tools.ConsoleLog("EVENT OnCreatingPlayerInstance".Color(ConsoleColor.Red));
+            if(BattleBitExtenderMain.DebugMode) Tools.ConsoleLog("EVENT OnCreatingPlayerInstance".Color(ConsoleColor.Red));
             var ev = new ServerCreatingPlayerInstance();
             ev.LoadData(new ServerCreatingPlayerInstanceData(null, steamID));
             return (CustomPlayer)CallEvent(ev);
@@ -74,12 +74,12 @@ public class EventManager : LogTools.ModuleLogHelper<EventManager>
         {
             try
             {
-                Tools.ConsoleLog("EVENT OnGameServerConnecting".Color(ConsoleColor.DarkCyan));
+                if(BattleBitExtenderMain.DebugMode)  Tools.ConsoleLog("EVENT OnGameServerConnecting".Color(ConsoleColor.DarkCyan));
                 var ev = new SererConnectingToAPI();
                 ev.LoadData(new SererConnectingToAPI_Data(null, address));
                 var r = CallEvent(ev);
-                Tools.ConsoleLog("EVENT OnGameServerConnecting".Color(ConsoleColor.Red) + "|||| " +
-                                 $"{r} AND {r == null}".Color(ConsoleColor.Green));
+                if(BattleBitExtenderMain.DebugMode)   Tools.ConsoleLog("EVENT OnGameServerConnecting".Color(ConsoleColor.Red) + "|||| " +
+                                                                       $"{r} AND {r == null}".Color(ConsoleColor.Green));
                 if (r == null) r = false;
                 return (bool)r;
             }
@@ -92,25 +92,22 @@ public class EventManager : LogTools.ModuleLogHelper<EventManager>
             return true;
         };
 
-        Log.Info($"NEEEEEEEEEEEEEEEDDDDDDD TOOOO CHHHEEECKKKKK {P == null} {P.L == null} {P.L.OnGameServerDisconnected == null}");
-
         P.L.OnGameServerDisconnected += async server =>
         {
-            Tools.ConsoleLog("EVENT OnGameServerDisconnected".Color(ConsoleColor.DarkCyan));
+            if(BattleBitExtenderMain.DebugMode)  Tools.ConsoleLog("EVENT OnGameServerDisconnected".Color(ConsoleColor.DarkCyan));
             var ev = new ServerDisconnectEvent();
             ev.LoadData(new ServerDisconnectEvent_Data((CustomGameServer)server));
             CallEvent(ev);
         };
-        Log.Info($"NEEEEEEEEEEEEEEEDDDDDDD TOOOO 3333CHHHEEECKKKKK {P == null} {P.L == null} {P.L.OnGameServerDisconnected == null}");
 
         P.L.OnCreatingGameServerInstance += (address, port) =>
         {
-            Tools.ConsoleLog("EVENT OnCreatingGameServerInstance".Color(ConsoleColor.DarkCyan)
+            if(BattleBitExtenderMain.DebugMode)    Tools.ConsoleLog("EVENT OnCreatingGameServerInstance".Color(ConsoleColor.DarkCyan)
                 .Background(Color.Purple));
             var ev = new ServerCreatingServerInstance();
             ev.LoadData(new ServerCreatingServerInstance_Data(null, address, port));
             var aa = (CustomGameServer)CallEvent(ev);
-            Tools.ConsoleLog($"I GOTTZZZZZ {aa?.GetType()} {aa == null}".Background(ConsoleColor.Red));
+            if(BattleBitExtenderMain.DebugMode) Tools.ConsoleLog($"I GOTTZZZZZ {aa?.GetType()} {aa == null}".Background(ConsoleColor.Red));
             return aa;
         };
 
@@ -134,7 +131,7 @@ public class EventManager : LogTools.ModuleLogHelper<EventManager>
             // Tools.ConsoleLog(Tools.TextTemplates.FirstLevelTags.BBECTag + Tools.TextTemplates.EventManager +$" initializing base event {ee.ToString()}");
             foreach (var kk in k.Value) _GetOrAdd(k.Key, kk);
 
-            Log.Success($" Loaded base event {ee.ToString()}");
+            if(BattleBitExtenderMain.DebugMode)Log.Success($" Loaded base event {ee.ToString()}");
         }
     }
 

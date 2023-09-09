@@ -57,7 +57,7 @@ public class BanCMD : Command
         return true;
     }
 
-    public override bool RunCommandConsole(string[] args)
+    public override bool RunConsoleCommand(string[] args)
     {
         if (Args.Length < 4)
         {

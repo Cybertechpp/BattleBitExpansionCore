@@ -1,6 +1,8 @@
 using System.Net;
+using ANSIConsole;
 using BattleBitAPI.Common;
 using CyberTechBattleBit2;
+using CyberTechBattleBit2.Managers.GamemodeManager;
 using Newtonsoft.Json;
 using Spectre.Console.Rendering;
 
@@ -155,5 +157,21 @@ public class GameServerSettingHolder
         gs.ServerSettings.SeaVehicleSpawnDelayMultipler = ServerSettings.SeaVehicleSpawnDelayMultipler;
         gs.ServerSettings.APCSpawnDelayMultipler = ServerSettings.APCSpawnDelayMultipler;
         gs.ServerSettings.HelicopterSpawnDelayMultipler = ServerSettings.HelicopterSpawnDelayMultipler;
+    }
+
+    public void OnAdd()
+    {
+        //Validate Map Data
+        var checker = new GameModeMapSizeChecker();
+        foreach (GameModeMapDataEntry e in ExtenderGamemodeMapData.RotationData)
+        {
+            var r = checker.Validate(e);
+            if (!r)
+            {
+                Tools.ConsoleLog($"Error could not Validate {e.ToString()}".Background(ConsoleColor.Red).Color(ConsoleColor.White));
+                e.HasError = true;
+            }
+            
+        }
     }
 }

@@ -2,6 +2,11 @@ namespace CyberTechBattleBit2.Events;
 
 public abstract class IEventBase //: IEvent
 {
+
+    public IEventBase()
+    {
+        
+    }
     // public abstract void LoadData(EventBaseData data);
 
     // public EventBaseData Data { get; internal set; }

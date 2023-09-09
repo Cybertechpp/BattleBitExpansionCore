@@ -17,7 +17,7 @@ public class RevengeCMD : Command
         // Tools.ConsoleLog($"TESTING THIS MESSAGE ONLY!!!! {a} {a.GetType()}");
         var xx = String.Join(" , ", a.Rdata[Player.SteamID]);
         Player.SayToChat($"You need to Kill {xx}");
-        Tools.ConsoleLog($"{Player.Name} needs to kill {xx}");
+        TestPlugin.Log.Info($"{Player.Name} needs to kill {xx}");
         return true;
     }
 }

@@ -43,7 +43,7 @@ public class HelpCMD : Command
         return true;
     }
 
-    public override bool RunCommandConsole(string[] args)
+    public override bool RunConsoleCommand(string[] args)
     {
         var page = 0;
         if (args.Length >= 1)

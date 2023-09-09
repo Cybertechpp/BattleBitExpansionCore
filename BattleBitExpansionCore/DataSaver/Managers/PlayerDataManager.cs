@@ -1,4 +1,5 @@
 using System.Reflection;
+using BattleBitExpansionCore.DataSaver.Managers;
 using CyberTechBattleBit2.DataSaver.Templates;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -39,7 +40,11 @@ public class PlayerDataManager
 
         var json = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.Auto
+            TypeNameHandling = TypeNameHandling.Auto,
+            Converters = new List<JsonConverter>()
+            {
+                new GameModeMapDataEntry.GamemodesConvert()
+            }
         });
         // var json = JsonConvert.SerializeObject(data);
         File.WriteAllText(sp, json);
@@ -66,7 +71,11 @@ public class PlayerDataManager
         var jsonString = File.ReadAllText(fileName);
         var weatherForecast = JsonConvert.DeserializeObject<CustomPlayerData>(jsonString, new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.Auto
+            TypeNameHandling = TypeNameHandling.Auto,
+            Converters = new List<JsonConverter>()
+            {
+                new GameModeMapDataEntry.GamemodesConvert()
+            }
         });
         // var weatherForecast = JsonConvert.DeserializeObject<CustomPlayerData>(jsonString, new JsonSerializerSettings()
         // {

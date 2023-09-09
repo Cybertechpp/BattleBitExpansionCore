@@ -14,18 +14,7 @@ public class CustomGameServer : GameServer<CustomPlayer>
     public Func<CustomPlayer, Task>? PlayerLeaveServerTaskList { get; set; }
     public Func<CustomPlayer, Task>? PlayerOnConnectTaskList { get; set; }
 
-
-    // this.ServerSettings = new ServerSettings<TPlayer>(this);
-    // this.MapRotation = new MapRotation<TPlayer>(this);
-    // this.GamemodeRotation = new GamemodeRotation<TPlayer>(this);
-    // this.RoundSettings = new RoundSettings<TPlayer>(this);
-    // this.mChangedModifications = new Queue<(ulong steamID, PlayerModifications<TPlayer>.mPlayerModifications)>(254);
-
-    // public override void AddPlayer(Player<TPlayer> player)
-    // {
-    //     base.AddPlayer(player);
-    // }
-
+    
     public override Task OnAPlayerDownedAnotherPlayer(OnPlayerKillArguments<CustomPlayer> args)
     {
         if (PlayerKillEvent != null) PlayerKillEvent(this, args);
@@ -42,28 +31,7 @@ public class CustomGameServer : GameServer<CustomPlayer>
         //TODO Calculate Distance
         //TODO Calculate Damage Done
         //TODO Give XP
-        //
-        // if (args.Victim.IsZombie)
-        // {
-        //     args.Victim.IsZombie = false;
-        //     args.Victim.Message("You are no longer zombie");
-        //
-        //     AnnounceShort("Choosing new zombie in 5");
-        //     await Task.Delay(1000);
-        //     AnnounceShort("Choosing new zombie in 4");
-        //     await Task.Delay(1000);
-        //     AnnounceShort("Choosing new zombie in 3");
-        //     await Task.Delay(1000);
-        //     AnnounceShort("Choosing new zombie in 2");
-        //     await Task.Delay(1000);
-        //     AnnounceShort("Choosing new zombie in 1");
-        //     await Task.Delay(1000);
-        //
-        //     args.Killer.IsZombie = true;
-        //     args.Killer.SetHeavyGadget(Gadgets.SledgeHammer.ToString(), 0, true);
-        //
-        //     // var position = args.Killer.GetPosition();
-        // }
+        
     }
 
     public override async Task OnPlayerDisconnected(CustomPlayer player)
@@ -110,25 +78,26 @@ public class CustomGameServer : GameServer<CustomPlayer>
 
             if (m == MapSize.None)
             {
-                
-                SetServerSizeForNextMatch(Tools.GetCorrectMapSize(c,d));
-                return;
+                SetServerSizeForNextMatch(Tools.GetCorrectMapSize(c, d));
+                // return;
             }
-            var mc = (int)(byte)m;
-
-            var a = ((mc * 2) - 5);
-
-            if (a <= c)
+            else
             {
-                //INCREASE SIZE
-                SetServerSizeForNextMatch(m.Increase());
-                
-            }
+                var mc = (int)(byte)m;
 
+                var a = ((mc * 2) - 5);
+
+                if (a <= c)
+                {
+                    //INCREASE SIZE
+                    SetServerSizeForNextMatch(m.Increase());
+                }
+            }
         }
+        BattleBitExtenderMain.Instance.GameServerSettings.getGameServerSettings(this).ExtenderGamemodeMapData.OnNext(this);
+        
     }
-    
-    
+
 
     public virtual async Task<bool> OnPlayerTypedCommand(CustomPlayer player, ChatChannel channel, string msg)
     {
@@ -148,8 +117,6 @@ public class CustomGameServer : GameServer<CustomPlayer>
     }
 
 
-    
-    
     public override async Task OnConnected()
     {
         await Console.Out.WriteLineAsync("Current state: " + RoundSettings.State);
@@ -158,16 +125,24 @@ public class CustomGameServer : GameServer<CustomPlayer>
         await a.ExtenderGamemodeMapData.OnStart(this);
     }
 
+    public override Task OnSessionChanged(long oldSessionID, long newSessionID)
+    {
+        return base.OnSessionChanged(oldSessionID, newSessionID);
+    }
+
     public override async Task OnGameStateChanged(GameState oldState, GameState newState)
     {
         await Console.Out.WriteLineAsync("State changed to -> " + newState);
         if (newState == GameState.WaitingForPlayers)
         {
             RoundSettings.PlayersToStart = BattleBitExtenderMain.Instance.GameServerSettings.getGameServerSettings(this).RoundSettings.PlayersToStart;
-        }else if (newState == GameState.CountingDown)
+        }
+        else if (newState == GameState.CountingDown)
         {
-            RoundSettings.SecondsLeft = BattleBitExtenderMain.Instance.GameServerSettings.getGameServerSettings(this).RoundCountDown;;
-        }else if (newState == GameState.EndingGame)
+            RoundSettings.SecondsLeft = BattleBitExtenderMain.Instance.GameServerSettings.getGameServerSettings(this).RoundCountDown;
+            ;
+        }
+        else if (newState == GameState.EndingGame)
         {
             RoundSettings.PlayersToStart = BattleBitExtenderMain.Instance.GameServerSettings.getGameServerSettings(this).RoundSettings.PlayersToStart;
             RoundSettings.SecondsLeft = 5;

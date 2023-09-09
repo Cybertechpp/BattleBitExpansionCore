@@ -24,9 +24,9 @@ public class CustomPlayerData : BaseDataSaverTemplate
         errorContext.Handled = true;
     }
 
-    public CustomPlayer LoadDataToPlayer(CustomPlayer p)
+    public CustomPlayer LoadDataToPlayer(CustomPlayer player)
     {
-        var player = new CustomPlayer();
+        // var player = new CustomPlayer();
         player.SetXp(XP);
         player.Kills = Kills;
         player.Deaths = Deaths;
